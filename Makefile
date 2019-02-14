@@ -12,7 +12,7 @@ OBJECTS=$(addprefix $(OUT_DIR)/,$(EXERCISES))
 all: no-skip test
 
 no-skip:
-	@ ! grep -rE '.*condition\(pending\).*' .
+	@ ! grep -rE '.*condition\(pending\)\]?\) :-' .
 
 clean:
 	rm -rf $(OUT_DIR)
