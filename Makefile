@@ -3,13 +3,17 @@ TEST_EXTENSION:=plt
 
 SOURCE_FILES := $(shell find */* -type f -name '*$(EXTENSION)')
 TEST_FILES := $(shell find */* -type f -name '*$(TEST_EXTENSION)')
-EXERCISES := $(dir $(SOURCE_FILES))
+EXERCISES := $(shell find */* -type f -name '*$(EXTENSION)' | cut -d'/' -f1 | uniq)
 OUT_DIR=.build
 OBJECTS=$(addprefix $(OUT_DIR)/,$(EXERCISES))
 
-
-.PHONY: test no-skip clean all
+.PHONY: init test no-skip clean all
 all: no-skip test
+
+init:
+	sudo apt-add-repository ppa:swi-prolog/devel -y
+	sudo apt-get update -q
+	sudo apt-get install --allow-unauthenticated swi-prolog-nox -y
 
 no-skip:
 	@ ! grep -rE '.*condition\(pending\)\]?\) :-' .
