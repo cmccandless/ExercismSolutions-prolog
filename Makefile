@@ -8,27 +8,27 @@ OUT_DIR=.build
 OBJECTS=$(addprefix $(OUT_DIR)/,$(EXERCISES))
 
 
-.PHONY: test no-skip clean
+.PHONY: test no-skip clean all
 all: no-skip test
 
 no-skip:
-    @ ! grep -rE '.*condition\(pending\).*' .
+	@ ! grep -rE '.*condition\(pending\).*' .
 
 clean:
-    rm -rf $(OUT_DIR)
+	rm -rf $(OUT_DIR)
 
 test: $(EXERCISES)
 
 $(EXERCISES): %: $(OUT_DIR)/%
 
 $(OUT_DIR):
-    @ mkdir -p $@
+	@ mkdir -p $@
 
 .SECONDEXPANSION:
 
 GET_DEP = $(filter $(patsubst $(OUT_DIR)/%,%,$@)%,$(SOURCE_FILES) $(TEST_FILES))
 $(OBJECTS): $$(GET_DEP) | $(OUT_DIR)
-    $(eval EXERCISE := $(patsubst $(OUT_DIR)/%,%,$@))
-    @ echo "Testing $(EXERCISE)..."
-    @ cd $(EXERCISE) && swipl -f *.pl -s *_tests.plt -g run_tests,halt -t 'halt(1)'
-    @ touch $@
+	$(eval EXERCISE := $(patsubst $(OUT_DIR)/%,%,$@))
+	@ echo "Testing $(EXERCISE)..."
+	@ cd $(EXERCISE) && swipl -f *.pl -s *_tests.plt -g run_tests,halt -t 'halt(1)'
+	@ touch $@
