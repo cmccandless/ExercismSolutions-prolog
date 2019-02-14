@@ -9,18 +9,24 @@ OBJECTS=$(addprefix $(OUT_DIR)/,$(EXERCISES))
 
 
 .PHONY: test no-skip clean
+all: no-skip test
+
 no-skip:
-    @ ! grep -rE '.*condition\(pending\).*'
+    @ ! grep -rE '.*condition\(pending\).*' .
+
 clean:
     rm -rf $(OUT_DIR)
+
 test: $(EXERCISES)
+
 $(EXERCISES): %: $(OUT_DIR)/%
+
 $(OUT_DIR):
     @ mkdir -p $@
 
 .SECONDEXPANSION:
 
-GET_DEP = $(filter $(patsubst $(OUT_DIR)/%,%,$@)%,$(SOURCE_FILES $(TEST_FILES)
+GET_DEP = $(filter $(patsubst $(OUT_DIR)/%,%,$@)%,$(SOURCE_FILES) $(TEST_FILES))
 $(OBJECTS): $$(GET_DEP) | $(OUT_DIR)
     $(eval EXERCISE := $(patsubst $(OUT_DIR)/%,%,$@))
     @ echo "Testing $(EXERCISE)..."
