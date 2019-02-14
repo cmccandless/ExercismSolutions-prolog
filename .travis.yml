@@ -7,4 +7,4 @@ before_script:
   - sudo apt-get install --allow-unauthenticated swi-prolog-nox
   
 script:
-  - make test
+  - make no-skip test
